@@ -19,12 +19,19 @@ export const RegisterUser = async (user) => {
 };
 
 export const GetCurrentUser = async () => {
-	await axiosInstance
-		.get("/api/users/get-current-user")
-		.then((response) => {
-			return response.data;
-		})
-		.catch((err) => {
-			return err.response.data;
-		});
+	try {
+		const response = await axiosInstance.get("/api/users/get-current-user");
+		return response.data;
+	} catch (err) {
+		return err.response.data;
+	}
+};
+
+export const GetAllUsers = async () => {
+	try {
+		const response = await axiosInstance.get("/api/users/get-all-users");
+		return response.data;
+	} catch (err) {
+		return err.response.data;
+	}
 };

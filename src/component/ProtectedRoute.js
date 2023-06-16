@@ -1,22 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GetCurrentUser } from "../apicalls/users";
+import { GetAllUsers, GetCurrentUser } from "../apicalls/users";
+import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { HideLoader, ShowLoader } from "../redux/loaderSlice";
+import { SetAllChats, SetAllUser, SetUser } from "../redux/userSlice";
+import { GetAllChats } from "../apicalls/chats";
 
 function ProtectedRoute({ children }) {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [user, setUser] = useState(null);
+	const { user } = useSelector((state) => state.userReducer);
 
-	const getCurrentUser = () => {
+	const getCurrentUser = async () => {
 		try {
-			const response = GetCurrentUser();
+			dispatch(ShowLoader());
+			const response = await GetCurrentUser();
+			const allUsersResponse = await GetAllUsers();
+			const allChatsResponse = await GetAllChats();
+			dispatch(HideLoader());
 			if (response.success) {
-				setUser(response.data);
-				return true;
+				dispatch(SetUser(response.data));
+				dispatch(SetAllUser(allUsersResponse.data));
+				dispatch(SetAllChats(allChatsResponse.data));
 			} else {
-				navigate("/");
+				toast.error(response.message);
+				navigate("/login");
 			}
-		} catch (e) {
-			console.log(e);
+		} catch (error) {
+			dispatch(HideLoader());
+			toast.error(error.message);
 			navigate("/login");
 		}
 	};
@@ -30,12 +43,28 @@ function ProtectedRoute({ children }) {
 		}
 	}, []);
 	return (
-		<>
-			<div>who dey</div>
-			<p>{user?.name}</p>
-			<h1>{user?.email}</h1>
-			<div>{children}</div>
-		</>
+		<div className="h-screen w-screen bg-gray-100 p-2">
+			<div className="flex justify-between p-5 bg-primary">
+				<div className="flex items-center gap-1">
+					<i className="ri-message-3-line text-2xl text-white"></i>
+					<h1 className="text-white text-2xl uppercase font-bold">
+						Connectify
+					</h1>
+				</div>
+				<div className="flex gap-1 text-md items-center ">
+					<i className="ri-user-line text-white"></i>
+					<h1 className="underline text-white">{user?.name}</h1>
+					<i
+						className="ri-logout-circle-r-line text-xl text-white cursor-pointer"
+						onClick={() => {
+							localStorage.removeItem("token");
+							window.location.href = "/";
+						}}
+					></i>
+				</div>
+			</div>
+			<div className="py-5">{children}</div>
+		</div>
 	);
 }
 
