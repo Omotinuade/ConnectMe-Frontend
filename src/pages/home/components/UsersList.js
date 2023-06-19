@@ -46,6 +46,7 @@ function UsersList({ searchKey, socket }) {
 		if (searchKey === "") {
 			return allChats;
 		}
+		console.log(allUsers);
 		return allUsers.filter((userObj) =>
 			userObj?.name.toLowerCase().includes(searchKey.toLowerCase())
 		);

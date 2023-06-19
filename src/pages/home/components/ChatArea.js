@@ -26,7 +26,6 @@ const ChatArea = ({ socket }) => {
 				sender: user._id,
 				text: newMessage,
 			};
-			console.log(selectedChat._id);
 			socket.emit("send-message", {
 				...message,
 				members: selectedChat.members.map((member) => member._id),
