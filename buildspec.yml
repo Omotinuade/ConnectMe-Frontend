@@ -8,7 +8,7 @@ env:
 phases:
   install:
     commands:
-      - npm i npm@latest -g
+      - npm i -g npm@8.5.1
       - pip install --upgrade pip
       - pip install --upgrade awscli
   pre_build:
