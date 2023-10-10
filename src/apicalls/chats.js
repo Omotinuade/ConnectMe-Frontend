@@ -9,7 +9,6 @@ export const GetAllChats = async () => {
 };
 
 export const CreateNewChat = async (members) => {
-	console.log(members);
 	try {
 		const response = await axiosInstance.post(
 			"/api/chats/create-new-chat",

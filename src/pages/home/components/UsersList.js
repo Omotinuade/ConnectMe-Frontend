@@ -46,7 +46,6 @@ function UsersList({ searchKey, socket }) {
 		if (searchKey === "") {
 			return allChats;
 		}
-		console.log(allUsers);
 		return allUsers.filter((userObj) =>
 			userObj?.name.toLowerCase().includes(searchKey.toLowerCase())
 		);
@@ -56,13 +55,13 @@ function UsersList({ searchKey, socket }) {
 		if (selectedChat) {
 			return selectedChat.members
 				.map((member) => member._id)
-				.includes(userObj._id);
+				.includes(userObj?._id);
 		}
 		return false;
 	};
 	const getLastMessage = (userObj) => {
 		const chat = allChats.find((chat) =>
-			chat.members?.map((member) => member._id).includes(userObj._id)
+			chat.members?.map((member) => member._id).includes(userObj?._id)
 		);
 
 		if (!chat || !chat.lastMessage) {
@@ -84,7 +83,7 @@ function UsersList({ searchKey, socket }) {
 	};
 	const getUnreadMessages = (userObj) => {
 		const chat = allChats.find((chat) =>
-			chat.members?.map((member) => member._id).includes(userObj._id)
+			chat.members?.map((member) => member._id).includes(userObj?._id)
 		);
 		if (chat && chat.unreadMessages && chat?.lastMessage?.sender !== user._id) {
 			return (
@@ -100,7 +99,7 @@ function UsersList({ searchKey, socket }) {
 			const tempAllChats = store.getState().userReducer.allChats;
 			if (tempSelectedChat._id !== message.chat) {
 				const updatedAllChats = tempAllChats.map((chat) => {
-					if (chat._id === message.chat) {
+					if (chat?._id === message.chat) {
 						return {
 							...chat,
 							unreadMessages: (chat?.unreadMessages || 0) + 1,
@@ -127,28 +126,28 @@ function UsersList({ searchKey, socket }) {
 						className={`shadow-sm border p-2 rounded-xl bg-white flex items-center justify-between cursor-pointer w-full ${
 							getIsSelectedChatOrNot(userObj) && "border-primary border-2"
 						}`}
-						key={userObj._id}
-						onClick={() => openChat(userObj._id)}
+						key={userObj?._id}
+						onClick={() => openChat(userObj?._id)}
 					>
 						<div className="flex gap-5 items-center  ">
-							{userObj.profilePic && (
+							{userObj?.profilePic && (
 								<img
-									src={userObj.profilePic}
+									src={userObj?.profilePic}
 									alt="profile pic"
 									className="w-10 h-10 rounded-full"
 								/>
 							)}
-							{!userObj.profilePic && (
+							{!userObj?.profilePic && (
 								<div className="bg-gray-500 rounded-full h-12 w-12 flex items-center justify-center ">
 									<h1 className="uppercase text-white  text-xl font-semibold">
-										{userObj.name[0]}
+										{userObj?.name[0]}
 									</h1>
 								</div>
 							)}
 							<div className="flex flex-col gap-1 ">
 								<div className="flex gap-1 justify-between">
 									<div className="flex gap-1 items-center">
-										<h1>{userObj.name}</h1>
+										<h1>{userObj?.name}</h1>
 									</div>
 
 									{getUnreadMessages(userObj)}
@@ -157,9 +156,9 @@ function UsersList({ searchKey, socket }) {
 								{getLastMessage(userObj)}
 							</div>
 						</div>
-						<div onClick={() => createNewChat(userObj._id)}>
+						<div onClick={() => createNewChat(userObj?._id)}>
 							{!allChats.find((chat) =>
-								chat.members?.map((mem) => mem._id).includes(userObj._id)
+								chat.members?.map((mem) => mem._id).includes(userObj?._id)
 							) && (
 								<button className="border-primary border p-2 rounded text-primary bg-white px-3 py-1 rounded-md">
 									Create Chat

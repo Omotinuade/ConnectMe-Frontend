@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 * {
-	font-family: "Montserrat";
-}
+	font-family:"Montserrat"; }
 input {
 	height: 40px;
 	border: 1px solid #6f58ba;

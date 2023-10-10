@@ -95,28 +95,28 @@ const ChatArea = ({ socket }) => {
 		<div className="bg-white h-[82vh] border rounded-2xl w-full flex flex-col justify-between p-5">
 			<div>
 				<div className="flex gap-5 items-center mb-2">
-					{recipientUser.profilePic && (
+					{recipientUser?.profilePic && (
 						<img
-							src={recipientUser.profilePic}
+							src={recipientUser?.profilePic}
 							alt="profile pic"
 							className="w-10 h-10 rounded-full"
 						/>
 					)}
-					{!recipientUser.profilePic && (
+					{!recipientUser?.profilePic && (
 						<div className="bg-gray-500 rounded-full h-10 w-10 flex items-center justify-center ">
 							<h1 className="uppercase text-white  text-xl font-semibold">
-								{recipientUser.name[0]}
+								{recipientUser?.name[0]}
 							</h1>
 						</div>
 					)}
-					<h1 className="uppercase">{recipientUser.name}</h1>
+					<h1 className="uppercase">{recipientUser?.name}</h1>
 				</div>
 				<hr />
 			</div>
 			<div className="h-[55vh] overflow-y-scroll p-5" id="messages">
 				<div className="flex flex-col gap-2">
 					{messages.map((message, index) => {
-						const isCurrentUserIsSender = message.sender === user._id;
+						const isCurrentUserIsSender = message.sender === user?._id;
 						return (
 							<div
 								className={`flex ${isCurrentUserIsSender && "justify-end"}`}
